@@ -19,7 +19,7 @@ public class AnswerController {
     private final QuestionService questionService;
     private final AnswerService answerService;
 
-    @PostMapping("/createAnswer/{id}")
+    @PostMapping("/create/{id}")
     @Valid
     public String createAnswer(Model model, @PathVariable("id") Long id,
                                @Valid AnswerForm answerForm,
@@ -32,5 +32,17 @@ public class AnswerController {
         this.answerService.create(question, answerForm.getContent());
         // Todo: 답변을 저장
         return String.format("redirect:/question/detail/%s", id);
+    }
+
+
+
+    @RequestMapping("/delete/{id}")
+    public String deleteAnswer(@PathVariable("id") Long id){
+        Question question = answerService.findQuestion(id);
+        Long questionId = question.getId();
+
+        this.answerService.delete(id);
+
+        return String.format("redirect:/question/detail/%s", questionId);
     }
 }
